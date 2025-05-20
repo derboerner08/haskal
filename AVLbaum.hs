@@ -8,9 +8,13 @@ where
     inorder :: AVL a -> [a]
     height :: AVL a -> Int
     insert :: Ord a => a -> AVL a -> AVL a
-    --balanceFactor :: AVL a -> Int
+    balanceFactor :: AVL a -> Int
     lrot :: AVL a -> AVL a
-    
+    rrot :: AVL a -> AVL a
+    lrrot :: AVL a -> AVL a
+    rlrot :: AVL a -> AVL a
+    insertlist :: Ord a => [a] -> AVL a -> AVL a
+
 
 
     new = Empty
@@ -35,14 +39,20 @@ where
      |e == w = (K l w r)
 
 
-    insertlist [] (K l w r) = (K l w r)
-    insertlist [x:s] (K l w r) = insertlist s (insert x (K l w r))
+    insertlist [] AVL = AVL
+    insertlist (x:s) AVL = insertlist s AVL
 
 
     lrot (K l w (K rl rw rr)) = (K (K l w rl) rw rr)
 
 
-    rrot (K (K ll rw lr) w r) = (K ll rw (K r w lr))
+    rrot (K (K ll rw lr) w r) = (K ll rw (K lr w r))
+
+
+    lrrot (K l w r) = rrot (K (lrot l) w r)
+
+
+    rlrot (K l w r) = lrot (K l w (rrot r))
 
 
     balanceFactor Empty = 0
